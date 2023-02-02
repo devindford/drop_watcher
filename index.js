@@ -55,7 +55,7 @@ async function defineBrowserPath() {
   if ( !pathInput.path.trim().length ) {
     browserPath = { path: '/usr/bin/google-chrome' }
   } else {
-    browserPath = pathInput.path
+    browserPath = pathInput
   }
 }
 
