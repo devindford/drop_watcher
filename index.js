@@ -11,12 +11,13 @@ let browserPath
 async function welcome() {
   console.log( `
   Welcome to Drop Watcher 👀.
-  Press Ctrl+C to end this program...
+  Press Ctrl+C to end this program at any time...
+  
   This program will launch a headless browser and goto your favorite twitch channel
   It will then log you in, and stay on that page with your access-token
   You can get your access-token from the cookies when logged into twitch
   Right click and hit inspect, goto storage, cookies, and look for auth-token
-  Copy that value and enter it in the next prompt
+  Copy that value and enter it when prompted
   `);
 }
 
