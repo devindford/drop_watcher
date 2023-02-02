@@ -3,16 +3,17 @@
 import puppeteer from 'puppeteer'
 import inquirer from 'inquirer';
 
-
+// Define global variables
 let accessToken
 let channel
 let browserPath
 
+// Display welcome message
 async function welcome() {
   console.log( `
   Welcome to Drop Watcher 👀.
   Press Ctrl+C to end this program at any time...
-  
+
   This program will launch a headless browser and goto your favorite twitch channel
   It will then log you in, and stay on that page with your access-token
   You can get your access-token from the cookies when logged into twitch
@@ -21,6 +22,7 @@ async function welcome() {
   `);
 }
 
+// Get the users access-token
 async function getToken() {
   accessToken = await inquirer.prompt( {
     name: 'tokenValue',
@@ -29,6 +31,7 @@ async function getToken() {
   } )
 }
 
+// Get the channel the user wants to have open
 async function getChannel() {
   channel = await inquirer.prompt( {
     name: 'name',
@@ -37,6 +40,7 @@ async function getChannel() {
   } )
 }
 
+// Get the path for the chrome browser
 async function defineBrowserPath() {
   const pathInput = await inquirer.prompt( {
     name: 'path',
@@ -47,22 +51,22 @@ async function defineBrowserPath() {
     `
   } )
 
-  console.log(pathInput)
-
-  if (pathInput.path === '') {
+  // if no value is passed, default to the linux install path
+  if ( !pathInput.path.trim().length ) {
     browserPath = { path: '/usr/bin/google-chrome' }
   } else {
-    browserPath = pathInput
+    browserPath = pathInput.path
   }
 }
 
+// Launch browser, add cookie, reload for logged in state
 async function watchTwitchStreams() {
   const browser = await puppeteer.launch( {
-    headless: true, executablePath: `${ browserPath.path }`
+    headless: true, executablePath: `${ browserPath.path.trim() }`
   } );
   console.log( 'launching browser' )
   const page = await browser.newPage();
-  await page.goto( `https://twitch.tv/${ channel.name }` );
+  await page.goto( `https://twitch.tv/${ channel.name.trim() }` );
   console.log( 'Navigating to twitch' )
   await page.evaluate( () => {
     localStorage.setItem( 'mature', 'true' )
@@ -73,15 +77,15 @@ async function watchTwitchStreams() {
   console.log( 'setting local storage items' )
   const cookies = [ {
     'name': 'auth-token',
-    'value': `${ accessToken.tokenValue }`
+    'value': `${ accessToken.tokenValue.trim() }`
   } ]
   await page.setViewport( { width: 1280, height: 720 } )
   await page.setCookie( ...cookies )
   await page.reload( {
     waitUntil: [ "networkidle2", "domcontentloaded" ], timeout: 4000
   } )
-  console.log( `logged in to twitch and watching ${ channel.name }` )
-  console.log('Press Ctrl+C to exit at any time')
+  console.log( `logged in to twitch and watching ${ channel.name.trim() }` )
+  console.log( 'Press Ctrl+C to exit at any time' )
 }
 
 
