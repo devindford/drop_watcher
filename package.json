@@ -1,0 +1,23 @@
+{
+  "name": "dropWatcher",
+  "version": "1.0.0",
+  "description": "A headless node application to watch twitch streams to earn drops",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "dropWatcher": "index.js"
+  },
+  "author": "Devin Ford",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^9.1.4",
+    "puppeteer": "^19.6.3",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^19.6.3"
+  }
+}
